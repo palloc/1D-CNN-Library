@@ -60,10 +60,13 @@ class Layer:
 if __name__ == '__main__':
     print "\n----- Start program -----\n"
     print "---------------------"
-    #すべて1の重みの行列(２次元配列)を様々な大きさで用意
-    w1 = [[1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]]
-    w2 = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
-    w3 = [[2.0, 1.0], [1.0, 1.0]]
+
+    #重み行列の作成
+    MakeWeight = lambda x,y:[[1.0 for i in range(x)] for j in range(y)]
+    #すべて重み1の行列(２次元配列)を様々な大きさで用意
+    w1 = MakeWeight(4,3)
+    w2 = MakeWeight(3,3)
+    w3 = MakeWeight(2,2)
 
     #１層目(入力層)
     Input = Layer()
@@ -81,6 +84,7 @@ if __name__ == '__main__':
     print "Layer2's node = ",
     print Layer2.node
     print "---------------------"
+
     #３層目(中間層)
     Layer3 = Layer()
     Layer3.node = Conv_Func(Layer2.node, w3)
