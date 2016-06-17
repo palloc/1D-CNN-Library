@@ -3,7 +3,6 @@ import math
 
 #ロジスティック関数(活性化関数)
 def Logistic_Func(x):
-    print math.exp(-x) +1.0
     return 1.0 / float((1.0 + math.exp(-x)))
 
 
@@ -25,13 +24,15 @@ class Layer:
         return math.exp(x) / sum(map(math.exp, self.node))
     #ソフトマックス関数を全ノードに通す
     def Do_Softmax(self):
-        self.node = map(self.Softmax_Func,self.node)
+        Sum = sum(map(math.exp, self.node))
+        temp = lambda x:math.exp(x)/Sum
+        self.node = map(temp, self.node)
 
 #全結合
 def AllBind_Func(x, w):
     #行列の掛け算ができないときのエラー処理
     if len(x) != len(w[0]):
-        print "Multiple Faild."
+        print "Multiple Faild in All bind layer."
         return 0.0
     next_node = []
     for i in w:
@@ -41,16 +42,22 @@ def AllBind_Func(x, w):
         next_node.append(temp)
     return next_node
 
-
     
 #メイン
 if __name__ == '__main__':
-    print "\n*****Start program*****\n"
-    #データ入力
+    print "\n----- Start program -----\n"
+    print "---------------------"
+    w1 = [[1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]]
+    w2 = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
+
+    #１層目(入力層)
     Input = Layer()
-    Input.node = [0.5,0.734,0.023,0.13]
-    w1 = [[1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0],[1.0,1.0,1.0,1.0]]
-    #２層目
+    Input.node = [0.3, 0.7, 0.1, 0.3]
+    print "Layer1's node = ",
+    print Input.node
+    print "---------------------"
+
+    #２層目(中間層)
     Layer2 = Layer()
     Layer2.node = AllBind_Func(Input.node, w1)
     print "Layer2's node before Do_Logistic = ",
@@ -58,10 +65,15 @@ if __name__ == '__main__':
     Layer2.Do_Logistic()
     print "Layer2's node = ",
     print Layer2.node
-    #３層目
+    print "---------------------"
+
+    #３層目(出力層)
     Layer3 = Layer()
-    Layer3.node = AllBind_Func(Layer2.node, w1)
-    
-    
-    
+    Layer3.node = AllBind_Func(Layer2.node, w2)
+    print "Layer3's node before Do_Logistic = ",
+    print Layer3.node
+    Layer3.Do_Softmax()
+    print "After Softmax = ",
+    print Layer3.node
+    print "---------------------"
     
