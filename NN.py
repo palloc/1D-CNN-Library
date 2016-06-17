@@ -5,6 +5,34 @@ import math
 def Logistic_Func(x):
     return 1.0 / float((1.0 + math.exp(-x)))
 
+#全結合
+def AllBind_Func(x, w):
+    #行列の掛け算ができないときのエラー処理
+    if len(x) != len(w[0]):
+        print "Multiple Faild in All bind layer."
+        return 0.0
+    next_node = []
+    for i in w:
+        temp = 0.0
+        for j in range(len(i)):
+            temp += x[j] * i[j]
+        next_node.append(temp)
+    return next_node
+
+#畳み込み
+def Conv_Func(x, w):
+    if len(x) <= len(w[0]):
+        print "Multiple Faild in Convolution layer."
+        return 0.0
+    next_node = []
+    counter = 0
+    for i in w:
+        temp = 0.0
+        for j in range(counter, counter+len(i)):
+            temp += x[j] * i[j-counter]
+        next_node.append(temp)
+        counter += 1
+    return next_node
 
 # layerクラス
 class Layer:
@@ -28,20 +56,7 @@ class Layer:
         temp = lambda x:math.exp(x)/Sum
         self.node = map(temp, self.node)
 
-#全結合
-def AllBind_Func(x, w):
-    #行列の掛け算ができないときのエラー処理
-    if len(x) != len(w[0]):
-        print "Multiple Faild in All bind layer."
-        return 0.0
-    next_node = []
-    for i in w:
-        temp = 0.0
-        for j in range(len(x)):
-            temp += x[j] * i[j]
-        next_node.append(temp)
-    return next_node
-
+        
     
 #メイン
 if __name__ == '__main__':
@@ -49,7 +64,7 @@ if __name__ == '__main__':
     print "---------------------"
     w1 = [[1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0], [1.0, 1.0, 1.0, 1.0]]
     w2 = [[1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0, 1.0]]
-
+    w3 = [[1.0, 1.0], [1.0, 1.0]]
     #１層目(入力層)
     Input = Layer()
     Input.node = [0.3, 0.7, 0.1, 0.3]
@@ -66,14 +81,23 @@ if __name__ == '__main__':
     print "Layer2's node = ",
     print Layer2.node
     print "---------------------"
-
-    #３層目(出力層)
+    #３層目(中間層)
     Layer3 = Layer()
-    Layer3.node = AllBind_Func(Layer2.node, w2)
+    Layer3.node = Conv_Func(Layer2.node, w3)
     print "Layer3's node before Do_Logistic = ",
     print Layer3.node
-    Layer3.Do_Softmax()
-    print "After Softmax = ",
+    Layer3.Do_Logistic()
+    print "Layer3's node = ",
     print Layer3.node
+    print "---------------------"
+    
+    #４層目(出力層)
+    Layer4 = Layer()
+    Layer4.node = AllBind_Func(Layer3.node, w3)
+    print "Layer4's node before Do_Softmax = ",
+    print Layer4.node
+    Layer4.Do_Softmax()
+    print "After Softmax = ",
+    print Layer4.node
     print "---------------------"
     
