@@ -8,22 +8,24 @@ def Logistic_Func(x):
 #全結合
 def AllBind_Func(x, w):
     #行列の掛け算ができないときのエラー処理
-    if len(x) != len(w[0]):
+    if len(x) > len(w[0]):
         print "Multiple Faild in All bind layer."
         return 0.0
     next_node = []
     #ノードと重みの内積を求める
     for i in w:
         temp = 0.0
-        for j in range(len(i)):
+        for j in range(len(x) - 1):
             temp += x[j] * i[j]
+        #バイアス
+        temp += i[len(i)-1]
         next_node.append(temp)
     return next_node
 
 #畳み込み層
 def Conv_Func(x, w):
     #行列の掛け算ができないときのエラー処理
-    if len(x) <= len(w[0]):
+    if len(x) > len(w[0]):
         print "Multiple Faild in Convolution layer."
         return 0.0
     next_node = []
@@ -31,13 +33,16 @@ def Conv_Func(x, w):
     #畳み込み処理
     for i in w:
         temp = 0.0
-        for j in range(counter, counter+len(i)):
+        #バイアス項抜きで内積を取る
+        for j in range(counter, counter+len(i)-1):
             temp += x[j] * i[j-counter]
+        #バイアス
+        temp += i[len(i)-1]
         next_node.append(temp)
         counter += 1
     return next_node
 
-#プーリング
+#プーリング層
 def Pooling_Func(x, kernel_size):
     next_node = []
     counter = 0
@@ -45,10 +50,10 @@ def Pooling_Func(x, kernel_size):
     while counter < len(x):
         #最大値を格納しておく変数
         max_temp = 0
+        #カーネル内の最大値を次のノード配列に追加
         for i in range(counter, counter + kernel_size):
             if max_temp < x[i]:
                 max_temp = x[i]
-        #カーネル内の最大値を次のノード配列に追加
         next_node.append(max_temp)
         counter += kernel_size
     return next_node
@@ -75,6 +80,7 @@ class Layer:
         temp = lambda x:math.exp(x)/Sum
         self.node = map(temp, self.node)
 
+
         
 if __name__ == '__main__':
     print "\n----- Start program -----\n"
@@ -83,9 +89,9 @@ if __name__ == '__main__':
     #重み行列の作成
     MakeWeight = lambda x,y:[[1.0 for i in range(x)] for j in range(y)]
     #すべて重み1の行列(２次元配列)を様々な大きさで用意
-    w1 = MakeWeight(4,3)
-    w2 = MakeWeight(3,3)
-    w3 = MakeWeight(2,2)
+    w1 = MakeWeight(5,3)
+    w2 = MakeWeight(4,3)
+    w3 = MakeWeight(3,2)
 
     #１層目(入力層)
     Input = Layer()
