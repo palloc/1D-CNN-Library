@@ -12,6 +12,7 @@ def AllBind_Func(x, w):
         print "Multiple Faild in All bind layer."
         return 0.0
     next_node = []
+    #ノードと重みの内積を求める
     for i in w:
         temp = 0.0
         for j in range(len(i)):
@@ -19,19 +20,37 @@ def AllBind_Func(x, w):
         next_node.append(temp)
     return next_node
 
-#畳み込み
+#畳み込み層
 def Conv_Func(x, w):
+    #行列の掛け算ができないときのエラー処理
     if len(x) <= len(w[0]):
         print "Multiple Faild in Convolution layer."
         return 0.0
     next_node = []
     counter = 0
+    #畳み込み処理
     for i in w:
         temp = 0.0
         for j in range(counter, counter+len(i)):
             temp += x[j] * i[j-counter]
         next_node.append(temp)
         counter += 1
+    return next_node
+
+#プーリング
+def Pooling_Func(x, kernel_size):
+    next_node = []
+    counter = 0
+    #カウンターが配列の最後に行くまで
+    while counter < len(x):
+        #最大値を格納しておく変数
+        max_temp = 0
+        for i in range(counter, counter + kernel_size):
+            if max_temp < x[i]:
+                max_temp = x[i]
+        #カーネル内の最大値を次のノード配列に追加
+        next_node.append(max_temp)
+        counter += kernel_size
     return next_node
 
 # layerクラス
