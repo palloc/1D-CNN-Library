@@ -114,7 +114,7 @@ if __name__ == '__main__':
     #１層目(入力層)
     Input = Layer()
     Input.node = [0.3, 0.7, 0.1, 0.3]
-    print "Layer1's node = ",
+    print "Layer1's node =",
     print Input.node
     print "---------------------"
 
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     print "Layer2's node before Do_Logistic = ",
     print Layer2.node
     Layer2.Do_Logistic()
-    print "Layer2's node = ",
+    print "Layer2's node =",
     print Layer2.node
     print "---------------------"
 
@@ -134,7 +134,7 @@ if __name__ == '__main__':
     print "Layer3's node before Do_Logistic = ",
     print Layer3.node
     Layer3.Do_Logistic()
-    print "Layer3's node = ",
+    print "Layer3's node =",
     print Layer3.node
     print "---------------------"
     
@@ -144,16 +144,16 @@ if __name__ == '__main__':
     print "Layer4's node before Do_Softmax = ",
     print Layer4.node
     Layer4.Do_Softmax()
-    print "After Softmax = ",
+    print "After Softmax =",
     print Layer4.node
     print "---------------------"
 
     #誤差を出す
     d = [1.0, 0.0]
     delta_4 = Delta_Func(Layer4.node, d)
-    print "δ = ",
+    print "δ ",
     print delta_4
-    print Layer3.node
+    print w3
     w3 = Out_update_Func(Layer3.node, delta_4, w3)
     print "new w3 =",
     print w3
