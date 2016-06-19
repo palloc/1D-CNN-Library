@@ -6,7 +6,7 @@ def Logistic_Func(x):
     return 1.0 / float((1.0 + math.exp(-x)))
 
 #全結合
-def AllBind_Func(x, w):
+def FullConect_Func(x, w):
     #行列の掛け算ができないときのエラー処理
     if len(x) > len(w[0]):
         print "Multiple Faild in All bind layer."
@@ -17,8 +17,6 @@ def AllBind_Func(x, w):
         temp = 0.0
         for j in range(len(x) - 1):
             temp += x[j] * i[j]
-        #バイアス
-        temp += i[len(i)-1]
         next_node.append(temp)
     return next_node
 
@@ -62,17 +60,16 @@ def Pooling_Func(x, kernel_size):
 def Delta_Func(x, d):
     result = []
     for i in range(len(x)):
-        result.append(x[i]-d[i])
+        result.append( x[i] - d[i] )
     return result
 
 #出力層の重みの更新
 def Out_update_Func(x, delta, w):
     new_w = []
-    temp = []
-    del_E = delta
-    for i in w:
-        for j in range(len(i)-1):
-            temp.append(i[j] - delta[j] * x[j])
+    for i in range(len(w)):
+        temp = []
+        for j in range(len(w[i])):
+            temp.append(w[i][j] - delta[i] * x[j])
         new_w.append(temp)
     return new_w
 
@@ -107,20 +104,21 @@ if __name__ == '__main__':
     #重み行列の作成
     MakeWeight = lambda x,y:[[1.0 for i in range(x)] for j in range(y)]
     #すべて重み1の行列(２次元配列)を様々な大きさで用意
-    w1 = MakeWeight(5,3)
-    w2 = MakeWeight(4,3)
-    w3 = MakeWeight(3,2)
+    w1 = MakeWeight(4,3)
+    w2 = MakeWeight(3,2)
+    w3 = MakeWeight(4,3)
 
     #１層目(入力層)
     Input = Layer()
-    Input.node = [0.3, 0.7, 0.1, 0.3]
+    Input.node = [0.3, 0.7, 0.1]
     print "Layer1's node =",
     print Input.node
     print "---------------------"
 
     #２層目(中間層)
     Layer2 = Layer()
-    Layer2.node = AllBind_Func(Input.node, w1)
+    Input.node.append(1) #バイアス
+    Layer2.node = FullConect_Func(Input.node, w3)
     print "Layer2's node before Do_Logistic = ",
     print Layer2.node
     Layer2.Do_Logistic()
@@ -130,7 +128,8 @@ if __name__ == '__main__':
 
     #３層目(中間層)
     Layer3 = Layer()
-    Layer3.node = Conv_Func(Layer2.node, w3)
+    Layer2.node.append(1) #バイアス
+    Layer3.node = FullConect_Func(Layer2.node, w3)
     print "Layer3's node before Do_Logistic = ",
     print Layer3.node
     Layer3.Do_Logistic()
@@ -140,7 +139,8 @@ if __name__ == '__main__':
     
     #４層目(出力層)
     Layer4 = Layer()
-    Layer4.node = AllBind_Func(Layer3.node, w3)
+    Layer3.node.append(1) #バイアス
+    Layer4.node = FullConect_Func(Layer3.node, w3)
     print "Layer4's node before Do_Softmax = ",
     print Layer4.node
     Layer4.Do_Softmax()
@@ -149,11 +149,10 @@ if __name__ == '__main__':
     print "---------------------"
 
     #誤差を出す
-    d = [1.0, 0.0]
+    d = [1.0, 0.0, 0.0]
     delta_4 = Delta_Func(Layer4.node, d)
-    print "δ ",
+    print "δ=",
     print delta_4
-    print w3
     w3 = Out_update_Func(Layer3.node, delta_4, w3)
     print "new w3 =",
     print w3
