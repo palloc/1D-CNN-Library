@@ -153,6 +153,7 @@ if __name__ == '__main__':
     delta_4 = Delta_Func(Layer4.node, d)
     print "δ = ",
     print delta_4
+    print Layer3.node
     w3 = Out_update_Func(Layer3.node, delta_4, w3)
     print "new w3 =",
     print w3
