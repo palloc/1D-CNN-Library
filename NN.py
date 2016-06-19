@@ -1,9 +1,17 @@
 #-*- coding=utf8 -*-
 import math
 
+
+"""
+--------------------------
+各層の計算をするための関数
+--------------------------
+"""
+
 #ロジスティック関数(活性化関数)
 def Logistic_Func(x):
     return 1.0 / float((1.0 + math.exp(-x)))
+
 
 #全結合
 def FullConect_Func(x, w):
@@ -56,12 +64,45 @@ def Pooling_Func(x, kernel_size):
         counter += kernel_size
     return next_node
 
-#誤差δの計算
-def Delta_Func(x, d):
+"""
+--------------------------------------
+ここからバックプロバケーション用の関数
+--------------------------------------
+"""
+
+#ロジスティック関数の微分
+def Dif_Logistic_Func(x):
+    new_node = []
+    for i in x:
+        new_node.append(Logistic_Func(i) * (1 - Logistic_Func(i)))
+    return new_node
+
+#最初のクロスエントロピーの微分δの計算
+def First_Delta_Func(x, d):
     result = []
     for i in range(len(x)):
         result.append( x[i] - d[i] )
     return result
+
+#各層のδの計算
+def Delta_Func(x, w, old_delta):
+    new_delta = []
+    temp_s = []
+    #ロジスティックの微分に通す
+    x = Dif_Logistic_Func(x)
+    #(W,δ)
+    for i in range(len(w)):
+        temp_t = 0
+        for j in range(len(i)):
+            temp_t += w[i][j] * old_delta[i]
+        temp_s.append(temp_t)
+    #Δ=f'(x)・temp_s
+    for i in range(len(x)):
+        new_delta.append(x[i] * temp_s[i])
+    return new_delta
+        
+
+
 
 #出力層の重みの更新
 def Out_update_Func(x, delta, w):
@@ -73,9 +114,16 @@ def Out_update_Func(x, delta, w):
         new_w.append(temp)
     return new_w
 
+#全結合層の重みの更新
+def FC_update_Func():
+
+
+
 #layerクラス
 class Layer:
-    """ノードを保有する層を作るクラス"""
+    """
+    ノードを保有する層を作るクラス
+    """
     #何層目かを表すid
     layer_id = 1
     #コンストラクタ
@@ -94,7 +142,6 @@ class Layer:
         Sum = sum(map(math.exp, self.node))
         temp = lambda x:math.exp(x)/Sum
         self.node = map(temp, self.node)
-
 
         
 if __name__ == '__main__':
@@ -150,7 +197,7 @@ if __name__ == '__main__':
 
     #誤差を出す
     d = [1.0, 0.0, 0.0]
-    delta_4 = Delta_Func(Layer4.node, d)
+    delta_4 = First_Delta_Func(Layer4.node, d)
     print "δ=",
     print delta_4
     w3 = Out_update_Func(Layer3.node, delta_4, w3)
