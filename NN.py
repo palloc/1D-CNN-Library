@@ -153,7 +153,7 @@ if __name__ == '__main__':
     w2 = MakeWeight(4,3)
     w3 = MakeWeight(4,3)
     w4 = MakeWeight(4,3)
-    while True:
+    for z in range(100):
         #１層目(入力層)
         Input = Layer()
         Input.node = [0.3, 0.7, 0.1]
