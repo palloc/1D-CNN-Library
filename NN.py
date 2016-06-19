@@ -93,19 +93,16 @@ def Delta_Func(x, w, old_delta):
     #(W,δ)
     for i in range(len(w)):
         temp_t = 0
-        for j in range(len(i)):
+        for j in range(len(w[0])):
             temp_t += w[i][j] * old_delta[i]
-        temp_s.append(temp_t)
+            temp_s.append(temp_t)
     #Δ=f'(x)・temp_s
     for i in range(len(x)):
         new_delta.append(x[i] * temp_s[i])
     return new_delta
-        
-
-
 
 #出力層の重みの更新
-def Out_update_Func(x, delta, w):
+def FC_Update_Func(x, delta, w):
     new_w = []
     for i in range(len(w)):
         temp = []
@@ -113,11 +110,6 @@ def Out_update_Func(x, delta, w):
             temp.append(w[i][j] - delta[i] * x[j])
         new_w.append(temp)
     return new_w
-
-#全結合層の重みの更新
-def FC_update_Func():
-
-
 
 #layerクラス
 class Layer:
@@ -152,8 +144,9 @@ if __name__ == '__main__':
     MakeWeight = lambda x,y:[[1.0 for i in range(x)] for j in range(y)]
     #すべて重み1の行列(２次元配列)を様々な大きさで用意
     w1 = MakeWeight(4,3)
-    w2 = MakeWeight(3,2)
+    w2 = MakeWeight(4,3)
     w3 = MakeWeight(4,3)
+    w4 = MakeWeight(4,3)
 
     #１層目(入力層)
     Input = Layer()
@@ -165,7 +158,7 @@ if __name__ == '__main__':
     #２層目(中間層)
     Layer2 = Layer()
     Input.node.append(1) #バイアス
-    Layer2.node = FullConect_Func(Input.node, w3)
+    Layer2.node = FullConect_Func(Input.node, w2)
     print "Layer2's node before Do_Logistic = ",
     print Layer2.node
     Layer2.Do_Logistic()
@@ -187,7 +180,7 @@ if __name__ == '__main__':
     #４層目(出力層)
     Layer4 = Layer()
     Layer3.node.append(1) #バイアス
-    Layer4.node = FullConect_Func(Layer3.node, w3)
+    Layer4.node = FullConect_Func(Layer3.node, w4)
     print "Layer4's node before Do_Softmax = ",
     print Layer4.node
     Layer4.Do_Softmax()
@@ -195,12 +188,30 @@ if __name__ == '__main__':
     print Layer4.node
     print "---------------------"
 
+    print "\n----------- Start BP -----------\n"
     #誤差を出す
     d = [1.0, 0.0, 0.0]
     delta_4 = First_Delta_Func(Layer4.node, d)
-    print "δ=",
+    print "delta4 =",
     print delta_4
-    w3 = Out_update_Func(Layer3.node, delta_4, w3)
-    print "new w3 =",
+    w4 = FC_Update_Func(Layer3.node, delta_4, w4)
+    print "new w4 =",
+    print w4
+    print "---------------------"
+    #更新後のw4を使用
+    delta_3 = Delta_Func(Layer3.node, w4, delta_4)
+    print "delta3 =",
+    print delta_3
+    w3 = FC_Update_Func(Layer2.node, delta_3, w3)
+    print "new w3=",
     print w3
+    print "---------------------"
+    #更新後のw3を使用
+    delta_2 = Delta_Func(Layer2.node, w3, delta_3)
+    print "delta2 =",
+    print delta_2
+    w3 = FC_Update_Func(Input.node, delta_2, w2)
+    print "new w2=",
+    print w2
+    print "---------------------"
     
