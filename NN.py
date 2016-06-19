@@ -58,7 +58,16 @@ def Pooling_Func(x, kernel_size):
         counter += kernel_size
     return next_node
 
-# layerクラス
+#誤差δの計算
+def delta_Func(x, d):
+    result = []
+    for i in range(len(x)):
+        result.append(x[i]-d[i])
+    return result
+
+
+
+#layerクラス
 class Layer:
     """ノードを保有する層を作るクラス"""
     #何層目かを表すid
