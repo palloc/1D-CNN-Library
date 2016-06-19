@@ -59,13 +59,22 @@ def Pooling_Func(x, kernel_size):
     return next_node
 
 #誤差δの計算
-def delta_Func(x, d):
+def Delta_Func(x, d):
     result = []
     for i in range(len(x)):
         result.append(x[i]-d[i])
     return result
 
-
+#出力層の重みの更新
+def Out_update_Func(x, delta, w):
+    new_w = []
+    temp = []
+    del_E = delta
+    for i in w:
+        for j in range(len(i)-1):
+            temp.append(i[j] - delta[j] * x[j])
+        new_w.append(temp)
+    return new_w
 
 #layerクラス
 class Layer:
@@ -138,4 +147,13 @@ if __name__ == '__main__':
     print "After Softmax = ",
     print Layer4.node
     print "---------------------"
+
+    #誤差を出す
+    d = [1.0, 0.0]
+    delta_4 = Delta_Func(Layer4.node, d)
+    print "δ = ",
+    print delta_4
+    w3 = Out_update_Func(Layer3.node, delta_4, w3)
+    print "new w3 =",
+    print w3
     
