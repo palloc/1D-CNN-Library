@@ -14,12 +14,20 @@ if __name__ == '__main__':
 
     #重み行列の作成
     MakeWeight = lambda x,y:[[1.0 for i in range(x)] for j in range(y)]
+
+    #ファイルからの入力値の読み取り
+    input_file = open("data")
+    temp = input_file.read()
+    input_node = []
+    for i in temp:
+        if i != '':
+            input_node.append(map(int, i.split(','))
+
     #すべて重み1の行列(２次元配列)を様々な大きさで用意
-    w1 = MakeWeight(4,3)
-    w2 = MakeWeight(4,3)
-    w3 = MakeWeight(4,3)
-    w4 = MakeWeight(4,3)
-    input_node = [[1,0,0],[1,1,1],[0,0,1],[0,1,0]]
+    w1 = MakeWeight(len(input_node[0]),3)
+    w2 = MakeWeight(len(input_node[0]),3)
+    w3 = MakeWeight(len(input_node[0]),3)
+    w4 = MakeWeight(len(input_node[0]),3)
     for z in input_node:
         print "\n----------- Start  -----------\n"  
         #１層目(入力層)
