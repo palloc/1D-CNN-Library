@@ -2,9 +2,9 @@
 import math
 
 """
---------------------------
+------------------------------
 　各層の計算をするための関数
---------------------------
+------------------------------
 """
 
 #ロジスティック関数(活性化関数)
@@ -62,6 +62,27 @@ def Pooling_Func(x, kernel_size):
         next_node.append(max_temp)
         counter += kernel_size
     return next_node
+
+
+#FC層の計算関数
+def Pass_FC(old_layer, new_layer, w):
+    old_layer.node.append(1)
+    print w
+    new_layer.node = FullConect_Func(old_layer.node, w)
+    new_layer.Do_Logistic()
+    print "Layer%d's node = " % new_layer.layer_id,
+    print new_layer.node
+    print "-----------------------------\n"
+
+#出力層のFC関数
+def Pass_FC_Out(old_layer, new_layer, w):
+    old_layer.node.append(1)
+    print w
+    new_layer.node = FullConect_Func(old_layer.node, w)
+    new_layer.Do_Softmax()
+    print "Layer%d's node = " % new_layer.layer_id,
+    print new_layer.node
+    print "-----------------------------\n"
 
 """
 --------------------------------------
