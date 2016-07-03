@@ -11,7 +11,6 @@ import sys
 def Logistic_Func(x):
     return 1.0 / float((1.0 + math.exp(-x)))
 
-
 #全結合
 def FullConect_Func(x, w):
     #行列の掛け算ができないときのエラー処理
@@ -68,7 +67,7 @@ def MakeWeight(x, y):
     return [[1.0 for i in range(x)] for j in range(y)]
 
 #データの読み込み
-def open_data(filename):
+def Open_data(filename):
     input_file = open(filename)
     temp = input_file.read().split('\n')
     input_node = []

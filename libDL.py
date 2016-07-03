@@ -82,5 +82,5 @@ class Layer:
     #ソフトマックス関数を全ノードに通す
     def Do_Softmax(self):
         Sum = sum(map(math.exp, self.node))
-        temp = lambda x:math.exp(x)/Sum
+        temp = lambda x:math.exp(x) / Sum
         self.node = map(temp, self.node)
