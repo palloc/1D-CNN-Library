@@ -2,11 +2,6 @@
 from libDL import *
       
 if __name__ == '__main__':
-
-    print "----------------------"
-    print "    Start program   "
-    print "----------------------"
-    
     #ファイルからの入力値の読み取り
     file_name = sys.argv[1]
     train_name = sys.argv[2]
@@ -25,6 +20,7 @@ if __name__ == '__main__':
     Layer2 = Layer()
     Layer3 = Layer()
     Layer4 = Layer()
+    count = 0
     #inputの数だけ学習させる
     for z in range(len(input_node)):
         #１層目(入力層)
@@ -40,6 +36,14 @@ if __name__ == '__main__':
             print " %.2f " % i,
         print ']'
 
+        max = [0,0]
+        for i in range(len(Layer4.node)):
+            if Layer4.node[i] > max[0]:
+                max[0] = Layer4.node[i]
+                max[1] = i
+        if d[z][max[1]] == 1:
+            print "correct answer!"
+            count += 1
         """
         ----------
         ここからBP
@@ -55,3 +59,4 @@ if __name__ == '__main__':
         delta_2 = Delta_Func(Layer2.node, w[1], delta_3)
         w[0] = FC_Update_Func(Input.node, delta_2, w[0])
     
+    print "%d correct." % count
