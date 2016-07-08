@@ -34,25 +34,40 @@ def First_Delta_Func(x, d):
         result.append( x[i] - d[i] )
     return result
 
-#各層のδの計算
-def Delta_Func(x, w, old_delta):
+#全結合層のδの計算
+def Delta_Func(node, w, delta):
     new_delta = []
     temp_s = []
     #ロジスティックの微分に通す
-    x = Dif_Logistic_Func(x)
+    node = Dif_Logistic_Func(x)
     #(W,δ)
     for i in range(len(w)):
         temp_t = 0
         for j in range(len(w[0])):
-            temp_t += w[i][j] * old_delta[i]
+            temp_t += w[i][j] * delta[i]
             temp_s.append(temp_t)
-    #Δ=f'(x)・temp_s
-    for i in range(len(x)):
-        new_delta.append(x[i] * temp_s[i])
+    #Δ=f'node)・temp_s
+    for i in range(len(node)):
+        new_delta.append(node[i] * temp_s[i])
+    return new_delta
+
+#畳み込み層のδの計算
+def Conv_Delta(layer, w, delta):
+    new_delta = []
+    temp_s = 0.0
+    #ロジスティックの微分に通す
+    node = Dif_Logistic_Func(x)
+
+    for i in range(len(layer.old_node)):
+        for j in range(len(w)):
+            if (i-j >= 0) and (i-j <= len(delta)):
+                temp_s += delta[i-j] * w[j]
+        new_delta.append(temp_s)
+        temp_s = 0.0
     return new_delta
 
 #プーリング層のδ
-def Max_Pool_Delta(layer, old_delta):
+def Max_Pool_Delta(layer, delta):
     new_delta = []
     #そのまま通す。落としたノードは0とする。
     counter = 0
@@ -74,7 +89,6 @@ def FC_Update_Func(x, delta, w):
         new_w.append(temp)
     return new_w
 
-def Conv_Update_Func()
 
 #layerクラス
 class Layer:
