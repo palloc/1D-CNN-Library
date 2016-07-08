@@ -89,6 +89,16 @@ def FC_Update_Func(x, delta, w):
         new_w.append(temp)
     return new_w
 
+#畳み込み層の重みの更新
+def Conv_Update_Func(node, delta, w):
+    new_w = []
+    temp = 0.0
+    for i in range(len(w)):
+        for j in range(len(node)-len(w)+1):
+            temp += delta[j] * node[j+i]
+        new_w.append(temp)
+        temp = 0.0
+    return new_w
 
 #layerクラス
 class Layer:
