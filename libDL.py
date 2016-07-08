@@ -51,10 +51,18 @@ def Delta_Func(x, w, old_delta):
         new_delta.append(x[i] * temp_s[i])
     return new_delta
 
-def Max_Pool_Delta(x, w, old_delta):
+#プーリング層のδ
+def Max_Pool_Delta(layer, old_delta):
     new_delta = []
-    temp_s = []
     #そのまま通す。落としたノードは0とする。
+    counter = 0
+    while counter > len(layer.node):
+        for i in range(counter, counter+layer.kernel_size):
+            if layer.old_node[i] == layer.node[counter]:
+                new_delta.append(delta[counter])
+            else:
+                new_delta.append(0)
+    return new_delta
 
 #出力層の重みの更新
 def FC_Update_Func(x, delta, w):
