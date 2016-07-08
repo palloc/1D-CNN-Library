@@ -47,7 +47,8 @@ def Conv_Func(x, w):
     return next_node
 
 #プーリング層
-def Pooling_Func(x, kernel_size):
+def Max_Pool_Func(x, kernel_size):
+    
     next_node = []
     counter = 0
     #カウンターが配列の最後に行くまで

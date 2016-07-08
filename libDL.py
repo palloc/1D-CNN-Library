@@ -3,6 +3,7 @@ from CalcFunc import *
 
 #FC層の計算関数
 def Pass_FC(old_layer, new_layer, w):
+    new_layer.bp_node = old_layer.node
     old_layer.node.append(1)
     new_layer.node = FullConect_Func(old_layer.node, w)
     new_layer.Do_Logistic()
@@ -15,7 +16,7 @@ def Pass_FC_Out(old_layer, new_layer, w):
 
 """
 --------------------------------------
-     バックプロバケーション用の関数
+    バックプロバケーション用の関数
 --------------------------------------
 """
 
@@ -50,6 +51,11 @@ def Delta_Func(x, w, old_delta):
         new_delta.append(x[i] * temp_s[i])
     return new_delta
 
+def Max_Pool_Delta(x, w, old_delta):
+    new_delta = []
+    temp_s = []
+    #そのまま通す。落としたノードは0とする。
+
 #出力層の重みの更新
 def FC_Update_Func(x, delta, w):
     new_w = []
@@ -60,19 +66,20 @@ def FC_Update_Func(x, delta, w):
         new_w.append(temp)
     return new_w
 
+def Conv_Update_Func()
 
 #layerクラス
 class Layer:
     """
-    ノードを保有する層を作るクラス
+    ノードを保有する層を作成するクラス
     """
-    #何層目かを表すid
-    layer_id = 1
     #コンストラクタ
     def __init__(self):
         #ノード情報を保持する配列
         self.node = []
-        Layer.layer_id += 1
+        #プーリング層のbpをする際に用いる一つ前のノードの情報とカーネルサイズ
+        self.kernel_size = 0
+        self.bp_node = []
     #全ノードをロジスティック関数に通す
     def Do_Logistic(self):
         self.node = map(Logistic_Func, self.node)
@@ -84,3 +91,4 @@ class Layer:
         Sum = sum(map(math.exp, self.node))
         temp = lambda x:math.exp(x) / Sum
         self.node = map(temp, self.node)
+

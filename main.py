@@ -31,6 +31,8 @@ if __name__ == '__main__':
         Pass_FC(Layer2, Layer3, w[1])
         #４層目(出力層)
         Pass_FC_Out(Layer3, Layer4, w[2])
+
+        #結果の出力
         print "Num : %d Output = [" % z, 
         for i in Layer4.node:
             print " %.2f " % i,
@@ -58,5 +60,5 @@ if __name__ == '__main__':
         #更新後のw3を使用
         delta_2 = Delta_Func(Layer2.node, w[1], delta_3)
         w[0] = FC_Update_Func(Input.node, delta_2, w[0])
-    
+        
     print "%d correct." % count
