@@ -10,6 +10,19 @@ def Pass_FC(old_layer, new_layer, w):
     new_layer.node = FullConect_Func(old_layer.node, w)
     new_layer.Do_Logistic()
 
+#Conv層の計算関数
+def Pass_Conv(old_layer, new_layer, w):
+    new_layer.bp_node = old_layer.node
+    old_layer.node.append(1)
+    new_layer.node = Conv_Func(old_layer.node, w)
+    new_layer.Do_Logistic()
+
+#Max_Pool層の計算関数
+def Pass_Max_Pool(old_layer, new_layer, kernel_size):
+    new_layer.bp_node = old_layer.node
+    old_layer.node.append(1)
+    new_layer.node = Max_Pool_Func(old_layer.node, kernel_size)
+    
 #出力層のFC関数
 def Pass_FC_Out(old_layer, new_layer, w):
     old_layer.node.append(1)
@@ -60,7 +73,7 @@ def Conv_Delta(layer, w, delta):
     #ロジスティックの微分に通す
     node = Dif_Logistic_Func(x)
 
-    for i in range(len(layer.old_node)):
+    for i in range(len(layer.bp_node)):
         for j in range(len(w)):
             if (i-j >= 0) and (i-j <= len(delta)):
                 temp_s += delta[i-j] * w[j]
@@ -75,7 +88,7 @@ def Max_Pool_Delta(layer, delta):
     counter = 0
     while counter > len(layer.node):
         for i in range(counter, counter+layer.kernel_size):
-            if layer.old_node[i] == layer.node[counter]:
+            if layer.bp_node[i] == layer.node[counter]:
                 new_delta.append(delta[counter])
             else:
                 new_delta.append(0)

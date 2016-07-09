@@ -15,6 +15,7 @@ if __name__ == '__main__':
     for i in range(2):
         w.append(MakeWeight(len(input_node[0])+1, len(input_node[0])))
     w.append(MakeWeight(len(input_node[0])+1, 3))
+    
 
     Input = Layer()
     Layer2 = Layer()
