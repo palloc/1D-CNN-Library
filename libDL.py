@@ -96,7 +96,8 @@ def Conv_Update_Func(node, delta, w):
     for i in range(len(w)):
         for j in range(len(node)-len(w)+1):
             temp += delta[j] * node[j+i]
-        new_w.append(temp)
+        #wの更新
+        new_w.append(w - temp)
         temp = 0.0
     return new_w
 
