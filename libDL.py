@@ -37,7 +37,7 @@ def First_Delta_Func(x, d):
     return result
 
 #全結合層のδの計算
-def Delta_Func(node, w, delta):
+def FC_Delta(node, w, delta):
     new_delta = []
     temp_s = []
     #ロジスティックの微分に通す

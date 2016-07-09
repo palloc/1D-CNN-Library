@@ -55,10 +55,10 @@ if __name__ == '__main__':
         delta_4 = First_Delta_Func(Layer4.node, d[z])
         w[2] = FC_Update_Func(Layer3.node, delta_4, w[2])
         #更新後のw4を使用
-        delta_3 = Delta_Func(Layer3.node, w[2], delta_4)
+        delta_3 = FC_Delta(Layer3.node, w[2], delta_4)
         w[1] = FC_Update_Func(Layer2.node, delta_3, w[1])
         #更新後のw3を使用
-        delta_2 = Delta_Func(Layer2.node, w[1], delta_3)
+        delta_2 = FC_Delta(Layer2.node, w[1], delta_3)
         w[0] = FC_Update_Func(Input.node, delta_2, w[0])
         
     print "%d correct." % count
