@@ -1,6 +1,8 @@
 #-*- coding=utf8 -*-
 from CalcFunc import *
 
+epsilon = 0.5
+
 #FC層の計算関数
 def Pass_FC(old_layer, new_layer, w):
     new_layer.bp_node = old_layer.node
@@ -39,7 +41,7 @@ def Delta_Func(node, w, delta):
     new_delta = []
     temp_s = []
     #ロジスティックの微分に通す
-    node = Dif_Logistic_Func(x)
+    node = Dif_Logistic_Func(node)
     #(W,δ)
     for i in range(len(w)):
         temp_t = 0
@@ -85,7 +87,7 @@ def FC_Update_Func(x, delta, w):
     for i in range(len(w)):
         temp = []
         for j in range(len(w[i])):
-            temp.append(w[i][j] - delta[i] * x[j])
+            temp.append(w[i][j] - epsilon * delta[i] * x[j])
         new_w.append(temp)
     return new_w
 
@@ -97,7 +99,7 @@ def Conv_Update_Func(node, delta, w):
         for j in range(len(node)-len(w)+1):
             temp += delta[j] * node[j+i]
         #wの更新
-        new_w.append(w - temp)
+        new_w.append(w - epsilon * temp)
         temp = 0.0
     return new_w
 
