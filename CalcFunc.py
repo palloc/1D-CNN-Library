@@ -29,19 +29,19 @@ def FullConect_Func(x, w):
 #畳み込み層
 def Conv_Func(x, w):
     #行列の掛け算ができないときのエラー処理
-    if len(x) > len(w[0]):
+    if len(x) > len(w):
         print "Multiple Faild in Convolution layer."
         return 0.0
     next_node = []
     counter = 0
     #畳み込み処理
-    for i in w:
+    for i in range(len(x)):
         temp = 0.0
         #バイアス項抜きで内積を取る
-        for j in range(counter, counter+len(i)-1):
-            temp += x[j] * i[j-counter]
+        for j in range(counter, counter+len(w)-1):
+            temp += x[j] * w[j-counter]
         #バイアス
-        temp += i[len(i)-1]
+        temp += w[len(w)-1]
         next_node.append(temp)
         counter += 1
     return next_node
@@ -67,6 +67,9 @@ def Max_Pool_Func(x, kernel_size):
 def MakeWeight(x, y):
     return [[1.0 for i in range(x)] for j in range(y)]
 
+def MakeConvWeight(x):
+    return [1.0 for i in range(x)]
+
 #データの読み込み
 def Open_data(filename):
     input_file = open(filename)
@@ -76,3 +79,4 @@ def Open_data(filename):
         if i != '':
             input_node.append(map(int, i.split(',')))
     return input_node
+

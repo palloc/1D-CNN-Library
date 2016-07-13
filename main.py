@@ -12,24 +12,29 @@ if __name__ == '__main__':
     #すべて重み1の行列(２次元配列)を用意
     w = []
     #層の数だけ重みを作成する
-    for i in range(2):
-        w.append(MakeWeight(len(input_node[0])+1, len(input_node[0])))
-    w.append(MakeWeight(len(input_node[0])+1, 3))
+
+    conv_kernel = 4
+    pool_kernel = 4
+    #Conv
+    w.append(MakeConvWeight(len(input_node[0])))
+    #M_Pool
+    #FC
+    w.append(MakeWeight(len(w[0]), 3))
     
 
     Input = Layer()
-    Layer2 = Layer()
-    Layer3 = Layer()
-    Layer4 = Layer()
+    Conv_Layer1 = Layer()
+    Pool_Layer1 = Layer()
+    Out_Layer1 = Layer()
     count = 0
     #inputの数だけ学習させる
     for z in range(len(input_node)):
         #１層目(入力層)
         Input.node = input_node[z]
         #２層目(中間層)
-        Pass_FC(Input, Layer2, w[0])
+        Pass_Conv(Input, Conv_Layer1, w[0])
         #３層目(中間層)
-        Pass_FC(Layer2, Layer3, w[1])
+        Pass_Max_Pool(Conv_Layer1, Pool_Layer1, w[1])
         #４層目(出力層)
         Pass_FC_Out(Layer3, Layer4, w[2])
 
