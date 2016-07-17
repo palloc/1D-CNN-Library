@@ -73,7 +73,7 @@ def Conv_Delta(layer, w, delta):
     for i in range(len(layer.bp_node)):
         for j in range(len(w)):
             if (i-j >= 0) and (i-j <= len(delta)):
-                temp_s += delta[i-j] * w[j]
+                temp_s += delta[i-j]# * w[j]
         new_delta.append(temp_s)
         temp_s = 0.0
     return new_delta
