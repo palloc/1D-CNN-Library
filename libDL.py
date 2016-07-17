@@ -41,7 +41,7 @@ def Dif_Logistic_Func(x):
     return new_node
 
 #最初のクロスエントロピーの微分δの計算
-def First_Delta_Func(x, d):
+def Cross_Entropy(x, d):
     result = []
     for i in range(len(x)):
         result.append( x[i] - d[i] )
@@ -88,12 +88,12 @@ def Max_Pool_Delta(layer, delta):
             if layer.bp_node[i] == layer.node[counter]:
                 new_delta.append(delta[counter])
             else:
-                new_delta.append(0)
+                new_delta.append(0.0)
         counter += 1
     return new_delta
 
 #出力層の重みの更新
-def FC_Update_Func(x, delta, w):
+def FC_Update(x, delta, w):
     new_w = []
     for i in range(len(w)):
         temp = []
@@ -103,9 +103,7 @@ def FC_Update_Func(x, delta, w):
     return new_w
 
 #畳み込み層の重みの更新
-def Conv_Update_Func(node, delta, w):
-    print w
-    print w[0]
+def Conv_Update(node, delta, w):
     new_w = []
     temp = 0.0
     for i in range(len(w)):

@@ -60,15 +60,13 @@ if __name__ == '__main__':
         ----------
         """
         #誤差を出す
-        delta_2 = First_Delta_Func(Out_Layer1.node, d[z])
-        w[1] = FC_Update_Func(Pool_Layer1.node, delta_2, w[1])
-        #更新後のw4を使用
-        print Pool_Layer1.node
+        delta_3 = Cross_Entropy(Out_Layer1.node, d[z])
+        delta_2 = FC_Delta(Pool_Layer1.node, w[1], delta_3)
+        w[1] = FC_Update(Pool_Layer1.node, delta_3, w[1])
         delta_1 = Max_Pool_Delta(Pool_Layer1, delta_2)
-        print delta_1
-        #更新後のw3を使用
         delta_0 = Conv_Delta(Conv_Layer1, delta_1, w[0][0])
         print delta_0
-        w[0][0] = Conv_Update_Func(Input.node, delta_1, w[0][0])
+        w[0][0] = Conv_Update(Input.node, delta_1, w[0][0])
+        print w[0][0][0]
 
     print "%d correct." % count
