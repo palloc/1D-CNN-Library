@@ -15,15 +15,13 @@ def Logistic_Func(x):
 def FullConect_Func(x, w):
     #行列の掛け算ができないときのエラー処理
     if len(x) < len(w[0]):
-        print len(x)
-        print len(w[0])
         print "Multiple Faild in All bind layer."
         return 0.0
     next_node = []
     #ノードと重みの内積を求める
     for i in w:
         temp = 0.0
-        for j in range(len(x) - 1):
+        for j in range(len(w)):
             temp += x[j] * i[j]
         temp += x[-1]
         next_node.append(temp)

@@ -11,8 +11,7 @@ if __name__ == '__main__':
 
     #すべて重み1の行列(２次元配列)を用意
     w = []
-    #層の数だけ重みを作成する
-
+    #カーネルサイズの定義
     conv_kernel = 4
     pool_kernel = 2
     #Conv
@@ -30,14 +29,11 @@ if __name__ == '__main__':
     count = 0
     #inputの数だけ学習させる
     for z in range(len(input_node)):
-        #１層目(入力層)
         Input.node = input_node[z]
-        #２層目(中間層)
         Pass_Conv(Input, Conv_Layer1, w[0][0])
-        #３層目(中間層)
+        #Poolは前のノードの情報が必要
         Pool_Layer1.bp_node = Conv_Layer1.node
         Pass_Max_Pool(Conv_Layer1, Pool_Layer1, pool_kernel)
-        #４層目(出力層)
         Pass_FC_Out(Pool_Layer1, Out_Layer1, w[1])
         
         #結果の出力
@@ -46,14 +42,7 @@ if __name__ == '__main__':
             print " %.2f " % i,
         print ']'
 
-        max = [0,0]
-        for i in range(len(Out_Layer1.node)):
-            if Out_Layer1.node[i] > max[0]:
-                max[0] = Out_Layer1.node[i]
-                max[1] = i
-        if d[z][max[1]] == 1:
-            print "correct answer!"
-            count += 1
+
         """
         ----------
         ここからBP
@@ -61,12 +50,35 @@ if __name__ == '__main__':
         """
         #誤差を出す
         delta_3 = Cross_Entropy(Out_Layer1.node, d[z])
-        delta_2 = FC_Delta(Pool_Layer1.node, w[1], delta_3)
+        delta_2 = FC_Delta(Pool_Layer1.node, delta_3, w[1])
         w[1] = FC_Update(Pool_Layer1.node, delta_3, w[1])
         delta_1 = Max_Pool_Delta(Pool_Layer1, delta_2)
         delta_0 = Conv_Delta(Conv_Layer1, delta_1, w[0][0])
-        print delta_0
         w[0][0] = Conv_Update(Input.node, delta_1, w[0][0])
-        print w[0][0][0]
+
+    Input2 = Layer()
+    Conv_Layer2 = Layer()
+    Pool_Layer2 = Layer()
+    Out_Layer2 = Layer()
+    count = 0
+
+    for z in range(len(input_node)):
+        Input2.node = input_node[z]
+        Pass_Conv(Input2, Conv_Layer2, w[0][0])
+        Pass_Max_Pool(Conv_Layer2, Pool_Layer2, pool_kernel)
+        Pass_FC_Out(Pool_Layer2, Out_Layer2, w[1])
+        
+        """
+        --------------------------
+        　　　　結果の出力
+        --------------------------
+        """
+        max = [0,0]
+        for i in range(len(Out_Layer2.node)):
+            if Out_Layer2.node[i] > max[0]:
+                max[0] = Out_Layer2.node[i]
+                max[1] = i
+        if d[z][max[1]] == 1:
+            count += 1
 
     print "%d correct." % count

@@ -48,7 +48,7 @@ def Cross_Entropy(x, d):
     return result
 
 #全結合層のδの計算
-def FC_Delta(node, w, delta):
+def FC_Delta(node, delta, w):
     new_delta = []
     temp_s = []
     #ロジスティックの微分に通す
