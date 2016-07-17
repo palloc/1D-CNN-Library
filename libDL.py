@@ -19,8 +19,6 @@ def Pass_Conv(old_layer, new_layer, w):
 
 #Max_Pool層の計算関数
 def Pass_Max_Pool(old_layer, new_layer, kernel_size):
-    new_layer.bp_node = old_layer.node
-    old_layer.node.append(1)
     new_layer.node = Max_Pool_Func(old_layer.node, kernel_size)
     
 #出力層のFC関数
@@ -70,9 +68,8 @@ def FC_Delta(node, w, delta):
 def Conv_Delta(layer, w, delta):
     new_delta = []
     temp_s = 0.0
-    #ロジスティックの微分に通す
-    node = Dif_Logistic_Func(x)
-
+    #ロジスティックの微分に通す 
+    node = Dif_Logistic_Func(layer.node)
     for i in range(len(layer.bp_node)):
         for j in range(len(w)):
             if (i-j >= 0) and (i-j <= len(delta)):
@@ -86,12 +83,13 @@ def Max_Pool_Delta(layer, delta):
     new_delta = []
     #そのまま通す。落としたノードは0とする。
     counter = 0
-    while counter > len(layer.node):
+    while counter < len(layer.node):
         for i in range(counter, counter+layer.kernel_size):
             if layer.bp_node[i] == layer.node[counter]:
                 new_delta.append(delta[counter])
             else:
                 new_delta.append(0)
+        counter += 1
     return new_delta
 
 #出力層の重みの更新
@@ -106,13 +104,15 @@ def FC_Update_Func(x, delta, w):
 
 #畳み込み層の重みの更新
 def Conv_Update_Func(node, delta, w):
+    print w
+    print w[0]
     new_w = []
     temp = 0.0
     for i in range(len(w)):
         for j in range(len(node)-len(w)+1):
             temp += delta[j] * node[j+i]
         #wの更新
-        new_w.append(w - epsilon * temp)
+        new_w.append(w[i] - epsilon * temp)
         temp = 0.0
     return new_w
 
@@ -126,7 +126,7 @@ class Layer:
         #ノード情報を保持する配列
         self.node = []
         #プーリング層のbpをする際に用いる一つ前のノードの情報とカーネルサイズ
-        self.kernel_size = 0
+        self.kernel_size = 2
         self.bp_node = []
     #全ノードをロジスティック関数に通す
     def Do_Logistic(self):
