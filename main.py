@@ -81,4 +81,4 @@ if __name__ == '__main__':
         if d[z][max[1]] == 1:
             count += 1
 
-    print "%f% correct." % count/len(input_node)*100
+    print "%d %% correct." % (float(count)/len(input_node)*100.0)
