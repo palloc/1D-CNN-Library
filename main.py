@@ -24,7 +24,9 @@ if __name__ == '__main__':
 
     Input = Layer()
     Conv_Layer1 = Layer()
+    Conv_Layer1.kernel_size = conv_kernel    
     Pool_Layer1 = Layer()
+    Pool_Layer1.kernel_size = pool_kernel
     Out_Layer1 = Layer()
     count = 0
     #inputの数だけ学習させる
