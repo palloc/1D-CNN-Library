@@ -172,7 +172,7 @@ def Max_Pool_Delta(layer, delta):
         counter += 1
     return new_delta
 
-#Update full connect layer's wight
+#Update full connect layer's weight
 def FC_Update(x, delta, w):
     new_w = []
     for i in range(len(w)):
@@ -183,7 +183,7 @@ def FC_Update(x, delta, w):
         new_w.append(temp)
     return new_w
 
-#Update convolution layer's wight
+#Update convolution layer's weight
 def Conv_Update(node, delta, w):
     new_w = []
     temp = 0.0

@@ -53,9 +53,17 @@
 - Conv_Delta(node, delta, w)
   - Calculate convolution layer's delta. (For next bp node)
 
-- Max_Pool_Delta(node, delta, w)
-  - Calculate full connect layer's delta. (For next bp node)
+- Max_Pool_Delta(layer, delta)
+  - Calculate max pooling layer's delta. (For next bp node)
 
+- FC_Update(x, delta, w)
+  - Update full connect layer's weight.
+
+- Conv_Update(node, delta, w)
+  - Update convolution layer's wieght.
+
+## example
+[main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py)
 
 
 
