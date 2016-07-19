@@ -27,6 +27,8 @@
 - Max_Pool_Func(x, kernel_size)
   - Max pooling layer's Calc function.
 
+### Pass NN function
+
 - Pass_FC(old_layer, new_layer, w)
   - Pass full connect layer automatically.
 
@@ -39,13 +41,15 @@
 - Pass_FC_Out(old_layer, new_layer, w)
   - Pass Output(full connect) layer automatically.
 
-### Function for back propagation
+## BP Function
 
 - Dif_Logistic_Func(x)
   - Differential logistic function.
 
 - Cross_Entropy(x, d)
   - Calculate cross entropy from output node.
+
+### Calculate delta
 
 - FC_Delta(node, delta, w)
   - Calculate full connect layer's delta. (For next bp node)
@@ -56,13 +60,15 @@
 - Max_Pool_Delta(layer, delta)
   - Calculate max pooling layer's delta. (For next bp node)
 
+### Update node function
+
 - FC_Update(x, delta, w)
   - Update full connect layer's weight.
 
 - Conv_Update(node, delta, w)
   - Update convolution layer's wieght.
 
-## example
+# example
 [main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py)
 
 
