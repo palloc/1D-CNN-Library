@@ -2,6 +2,7 @@
 import math
 import sys
 
+epsilon = 0.5
 
 #make weight
 def MakeWeight(x, y):
@@ -19,12 +20,10 @@ def Open_data(filename):
         if i != '':
             input_node.append(map(int, i.split(',')))
     return input_node
-epsilon = 0.5
-
 
 """
 ------------------------------
-   Calculate Layer's node
+    Calculate Layer's node
 ------------------------------
 """
 
@@ -110,7 +109,7 @@ def Pass_FC_Out(old_layer, new_layer, w):
 
 """
 -----------------------------------
-　　Function for back-propagation
+   Function for back-propagation
 -----------------------------------
 """
 
