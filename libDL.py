@@ -145,7 +145,7 @@ def FC_Delta(node, delta, w):
     return new_delta
 
 #Calculate convolution layer's δ
-def Conv_Delta(layer, w, delta):
+def Conv_Delta(layer, delta, w):
     new_delta = []
     temp_s = 0.0
     #Pass differential logistic function    

@@ -29,12 +29,14 @@ if __name__ == '__main__':
     Pool_Layer1.kernel_size = pool_kernel
     Out_Layer1 = Layer()
 
+
     """
     ------------------------------
-           start learning
+            start learning
     ------------------------------
     """
     for z in range(len(input_node)):
+
         Input.node = input_node[z]
         Pass_Conv(Input, Conv_Layer1, w[0][0])
         #Pooling must remember pre node
@@ -58,12 +60,10 @@ if __name__ == '__main__':
         #Calc delta
         delta_3 = Cross_Entropy(Out_Layer1.node, d[z])
         delta_2 = FC_Delta(Pool_Layer1.node, delta_3, w[1])
-        #Update weight
-        w[1] = FC_Update(Pool_Layer1.node, delta_3, w[1])
-        #Calc delta
         delta_1 = Max_Pool_Delta(Pool_Layer1, delta_2)
         delta_0 = Conv_Delta(Conv_Layer1, delta_1, w[0][0])
         #Update weight
+        w[1] = FC_Update(Pool_Layer1.node, delta_3, w[1])
         w[0][0] = Conv_Update(Input.node, delta_1, w[0][0])
 
 
