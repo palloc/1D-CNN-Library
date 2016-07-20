@@ -1,4 +1,4 @@
-# one dimensional CNN
+# One dimensional CNN library
 
 # Usage
 
@@ -69,10 +69,6 @@
   - Update convolution layer's wieght.
 
 # example
-#python [main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py) data train_data
-
-
-
-
+$python [main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py) data train_data
 
 

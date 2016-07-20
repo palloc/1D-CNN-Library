@@ -2,14 +2,12 @@
 import math
 import sys
 
+#learning rate
 epsilon = 0.5
 
 #make weight
 def MakeWeight(x, y):
     return [[1.0 for i in range(x)] for j in range(y)]
-
-def MakeConvWeight(x):
-    return [1.0 for i in range(x)]
 
 #read data
 def Open_data(filename):

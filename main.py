@@ -87,7 +87,7 @@ if __name__ == '__main__':
         
         """
         --------------------------
-        　　　　print result
+       　　　　print result
         --------------------------
         """
         max = [0,0]
@@ -97,5 +97,5 @@ if __name__ == '__main__':
                 max[1] = i
         if d[z][max[1]] == 1:
             count += 1
-
-    print "%.2f%% correct." % (float(count)/float(len(input_node))*100.0)
+    #accuracy
+    print "%.2f%% correct." % (float(count) / float(len(input_node)) * 100.0)
