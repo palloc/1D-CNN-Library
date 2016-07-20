@@ -69,7 +69,7 @@
   - Update convolution layer's wieght.
 
 # example
-[main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py)
+#python [main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py) data train_data
 
 
 
