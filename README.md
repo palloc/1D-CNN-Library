@@ -5,9 +5,6 @@
 - MakeWeight(x, y)
   - Make weight array. (w[x][y])
 
-- MakeConvWeight(x)
-   - Make Conv-Layer's wight. (w[x])
-
 - Open_data(filename)
   - Open [filename] file.
 
