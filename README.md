@@ -38,7 +38,7 @@
 - Pass_FC_Out(old_layer, new_layer, w)
   - Pass Output(full connect) layer automatically.
 
-## BP Function
+## BPNN Function
 
 - Dif_Logistic_Func(x)
   - Differential logistic function.
@@ -57,7 +57,7 @@
 - Max_Pool_Delta(layer, delta)
   - Calculate max pooling layer's delta. (For next bp node)
 
-### Update node function
+### Update node
 
 - FC_Update(x, delta, w)
   - Update full connect layer's weight.
@@ -66,6 +66,6 @@
   - Update convolution layer's wieght.
 
 # example
-$python [main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py) data train_data
+$python [main.py](https://github.com/palloc/NeuralNetwork/blob/master/main.py) learn_data train_data
 
 
