@@ -22,12 +22,10 @@ if __name__ == '__main__':
     w.append(MakeWeight(next_nodelen, 3))
     
     #Prepare layer object
-    Input = Layer()
-    Conv_Layer1 = Layer()
-    Conv_Layer1.kernel_size = conv_kernel    
-    Pool_Layer1 = Layer()
-    Pool_Layer1.kernel_size = pool_kernel
-    Out_Layer1 = Layer()
+    Input = Layer(0)
+    Conv_Layer1 = Layer(conv_kernel)
+    Pool_Layer1 = Layer(pool_kernel)
+    Out_Layer1 = Layer(0)
 
 
     """
@@ -35,6 +33,8 @@ if __name__ == '__main__':
             start learning
     ------------------------------
     """
+
+
     for z in range(len(input_node)/2):
 
         Input.node = input_node[z]
@@ -74,10 +74,10 @@ if __name__ == '__main__':
     ------------------------------
     """
     
-    Input2 = Layer()
-    Conv_Layer2 = Layer()
-    Pool_Layer2 = Layer()
-    Out_Layer2 = Layer()
+    Input2 = Layer(0)
+    Conv_Layer2 = Layer(conv_kernel)
+    Pool_Layer2 = Layer(pool_kernel)
+    Out_Layer2 = Layer(0)
     count = 0
 
     for z in range(len(input_node)/2, len(input_node)):

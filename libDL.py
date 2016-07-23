@@ -235,13 +235,13 @@ def Conv_Update(node, delta, w):
 
 
 class Layer:
-    def __init__(self):
+    def __init__(self, kernel_size):
 
         #Array for store the node information
         self.node = []
 
         #kernel_size(for convolution bp and pooling bp)
-        self.kernel_size = 0
+        self.kernel_size = kernel_size
 
         #node information for bp(store pre node)
         self.bp_node = []
