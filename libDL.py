@@ -19,23 +19,30 @@ def Open_data(filename):
             input_node.append(map(int, i.split(',')))
     return input_node
 
+
+
 """
 ------------------------------
     Calculate Layer's node
 ------------------------------
 """
 
+
+
 #Logistic function(activation function)
 def Logistic_Func(x):
     return 1.0 / float((1.0 + math.exp(-x)))
 
+
 #Full connect layer's Calc_func
 def FullConect_Func(x, w):
+
     #error process(if can't mult matrix)
     if len(x) < len(w[0]):
-        print "Multiple Faild in All bind layer."
+        print "Multiple Faild in FC layer."
         return 0.0
     next_node = []
+
     #dot product
     for i in w:
         temp = 0.0
@@ -45,25 +52,31 @@ def FullConect_Func(x, w):
         next_node.append(temp)
     return next_node
 
+
 #Convolution layer's Calc_func
 def Conv_Func(x, w):
+
     #error process(if can't mult matrix)
     if len(x) < len(w):
         print "Multiple Faild in Convolution layer."
         return 0.0
     next_node = []
     counter = 0
+
     #Convolution
     for i in range(len(x)-len(w)):
         temp = 0.0
+
         #dot product without bias
         for j in range(counter, counter+len(w)-1):
             temp += x[j] * w[j-counter]
+
         #bias
         temp += w[len(w)-1]
         next_node.append(temp)
         counter += 1
     return next_node
+
 
 #Max pooling layer's Calc_func
 def Max_Pool_Func(x, kernel_size):
@@ -71,6 +84,7 @@ def Max_Pool_Func(x, kernel_size):
     counter = 0
     while counter < len(x):
         max_temp = 0.0
+
         #Add max_node in the kernel to next_node
         for i in range(counter, counter + kernel_size - 1):
             if max_temp < x[i]:
@@ -87,6 +101,7 @@ def Pass_FC(old_layer, new_layer, w):
     new_layer.node = FullConect_Func(old_layer.node, w)
     new_layer.Do_Logistic()
 
+
 #Pass convolution layer
 def Pass_Conv(old_layer, new_layer, w):
     new_layer.bp_node = old_layer.node
@@ -94,15 +109,18 @@ def Pass_Conv(old_layer, new_layer, w):
     new_layer.node = Conv_Func(old_layer.node, w)
     new_layer.Do_Logistic()
 
+
 #pass max_pooling layer
 def Pass_Max_Pool(old_layer, new_layer, kernel_size):
     new_layer.node = Max_Pool_Func(old_layer.node, kernel_size)
     
+
 #pass full connect layer
 def Pass_FC_Out(old_layer, new_layer, w):
     old_layer.node.append(1)
     new_layer.node = FullConect_Func(old_layer.node, w)
     new_layer.Do_Softmax()
+
 
 
 """
@@ -111,12 +129,15 @@ def Pass_FC_Out(old_layer, new_layer, w):
 -----------------------------------
 """
 
+
+
 #Differential logistic function
 def Dif_Logistic_Func(x):
     new_node = []
     for i in x:
         new_node.append(Logistic_Func(i) * (1 - Logistic_Func(i)))
     return new_node
+
 
 #Calculate cross entropy
 def Cross_Entropy(x, d):
@@ -125,12 +146,15 @@ def Cross_Entropy(x, d):
         result.append( x[i] - d[i] )
     return result
 
+
 #Calculate full connect layer's δ
 def FC_Delta(node, delta, w):
     new_delta = []
     temp_s = []
+
     #Pass differential logistic function
     node = Dif_Logistic_Func(node)
+
     #(W,δ)
     for i in range(len(w)):
         temp_t = 0
@@ -141,10 +165,12 @@ def FC_Delta(node, delta, w):
         new_delta.append(node[i] * temp_s[i])
     return new_delta
 
+
 #Calculate convolution layer's δ
 def Conv_Delta(layer, delta, w):
     new_delta = []
     temp_s = 0.0
+
     #Pass differential logistic function    
     node = Dif_Logistic_Func(layer.node)
     for i in range(len(layer.bp_node)):
@@ -155,9 +181,11 @@ def Conv_Delta(layer, delta, w):
         temp_s = 0.0
     return new_delta
 
+
 #Calculate max pooling layer's δ
 def Max_Pool_Delta(layer, delta):
     new_delta = []
+
     #0 replace max node with zero
     counter = 0
     while counter < len(layer.node):
@@ -169,22 +197,26 @@ def Max_Pool_Delta(layer, delta):
         counter += 1
     return new_delta
 
+
 #Update full connect layer's weight
 def FC_Update(x, delta, w):
     new_w = []
     for i in range(len(w)):
         temp = []
+
         #Update w
         for j in range(len(w[i])):
             temp.append(w[i][j] - epsilon * delta[i] * x[j])
         new_w.append(temp)
     return new_w
 
+
 #Update convolution layer's weight
 def Conv_Update(node, delta, w):
     new_w = []
     temp = 0.0
     for i in range(len(w)):
+
         #Update w
         for j in range(len(node)-len(w)+1):
             temp += delta[j] * node[j+i]
@@ -193,25 +225,35 @@ def Conv_Update(node, delta, w):
     return new_w
 
 
+
 """
 ----------------------
      Layer class
 ----------------------
 """
+
+
+
 class Layer:
     def __init__(self):
+
         #Array for store the node information
         self.node = []
+
         #kernel_size(for convolution bp and pooling bp)
         self.kernel_size = 0
+
         #node information for bp(store pre node)
         self.bp_node = []
+
     #Do logistic
     def Do_Logistic(self):
         self.node = map(Logistic_Func, self.node)
+
     #Softmax function(activation function for output layer)
     def Softmax_Func(self, x):
         return math.exp(x) / sum(map(math.exp, self.node))
+
     #Do softmax
     def Do_Softmax(self):
         Sum = sum(map(math.exp, self.node))

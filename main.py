@@ -35,7 +35,7 @@ if __name__ == '__main__':
             start learning
     ------------------------------
     """
-    for z in range(len(input_node)):
+    for z in range(len(input_node)/2):
 
         Input.node = input_node[z]
         Pass_Conv(Input, Conv_Layer1, w[0][0])
@@ -47,9 +47,10 @@ if __name__ == '__main__':
         #print output node
         print "Num : %d Output = [" % z, 
         for i in Out_Layer1.node:
-            print " %.2f " % i,
+            print " %f " % i,
         print ']'
 
+            
 
         """
         ------------------------------
@@ -79,7 +80,7 @@ if __name__ == '__main__':
     Out_Layer2 = Layer()
     count = 0
 
-    for z in range(len(input_node)):
+    for z in range(len(input_node)/2, len(input_node)):
         Input2.node = input_node[z]
         Pass_Conv(Input2, Conv_Layer2, w[0][0])
         Pass_Max_Pool(Conv_Layer2, Pool_Layer2, pool_kernel)
