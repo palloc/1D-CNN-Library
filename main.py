@@ -6,20 +6,22 @@ if __name__ == '__main__':
     file_name = sys.argv[1]
     train_name = sys.argv[2]
     input_node = Open_data(file_name)
-    #training data
+    #read training data
     d = Open_data(train_name)
 
     #Prepare weight
     w = []
+
     #decide kernel size
     conv_kernel = 4
     pool_kernel = 2
+
     #Conv weight
     w.append(MakeWeight(4,1))
     #M_Pool weight
     next_nodelen=(len(input_node[0])-conv_kernel+1)/pool_kernel
-    #FC weight
-    w.append(MakeWeight(next_nodelen, 3))
+    #FC weight(node_length and output node num)
+    w.append(MakeWeight(next_nodelen, 2))
     
     #Prepare layer object
     Input = Layer(0)
