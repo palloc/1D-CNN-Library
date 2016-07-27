@@ -6,6 +6,7 @@ if __name__ == '__main__':
     file_name = sys.argv[1]
     train_name = sys.argv[2]
     input_node = Open_data(file_name)
+
     #read training data
     d = Open_data(train_name)
 
@@ -52,18 +53,19 @@ if __name__ == '__main__':
             print " %f " % i,
         print ']'
 
+        
         """
         ------------------------------
           start evaluating accuracy
         ------------------------------
         """
 
+        
         max = [0.0, 0]
         for i in range(len(Out_Layer1.node)):
             if Out_Layer1.node[i] > max[0]:
                 max[0] = Out_Layer1.node[i]
                 max[1] = i
-        print max
         if d[z][max[1]] == 1:
             count += 1
 
@@ -74,6 +76,7 @@ if __name__ == '__main__':
         ------------------------------
         """
 
+
         #Calc delta
         delta_3 = Cross_Entropy(Out_Layer1.node, d[z])
         delta_2 = Out_FC_Delta(Pool_Layer1.node, delta_3, w[1])
@@ -82,6 +85,7 @@ if __name__ == '__main__':
         #Update weight
         w[1] = FC_Update(Pool_Layer1.node, delta_3, w[1])
         w[0][0] = Conv_Update(Input.node, delta_1, w[0][0])
+
 
     #accuracy
     print "%.2f%% correct." % (float(count) / float(len(input_node)) * 100.0)
