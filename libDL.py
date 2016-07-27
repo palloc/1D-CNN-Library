@@ -3,7 +3,8 @@ import math
 import sys
 
 #learning rate
-epsilon = 0.5
+epsilon = 0.3
+
 
 #make weight
 def MakeWeight(x, y):
@@ -18,7 +19,6 @@ def Open_data(filename):
         if i != '':
             input_node.append(map(int, i.split(',')))
     return input_node
-
 
 
 """
@@ -147,6 +147,26 @@ def Cross_Entropy(x, d):
     return result
 
 
+#Calculate output full connect layer's δ
+def Out_FC_Delta(node, delta, w):
+    new_delta = []
+    temp_s = []
+
+    #Pass differential logistic function
+    node = Dif_Logistic_Func(node)
+
+    #(W^T,δ)
+    for i in range(len(w[0])):
+        temp_t = 0.0
+        for j in range(len(w)):
+            temp_t += w[j][i] * delta[j]
+        temp_s.append(temp_t)
+    for i in range(len(node)):
+        new_delta.append(node[i] * temp_s[i])
+    return new_delta
+
+
+
 #Calculate full connect layer's δ
 def FC_Delta(node, delta, w):
     new_delta = []
@@ -154,31 +174,29 @@ def FC_Delta(node, delta, w):
 
     #Pass differential logistic function
     node = Dif_Logistic_Func(node)
-
-    #(W,δ)
-    for i in range(len(w)):
-        temp_t = 0
-        for j in range(len(w[0])):
-            temp_t += w[i][j] * delta[i]
-            temp_s.append(temp_t)
-    for i in range(len(node)):
-        new_delta.append(node[i] * temp_s[i])
+    #(W^T,δ)
+    for i in range(len(w[0])):
+        temp_t = 0.0
+        for j in range(len(w)):
+            temp_t += w[j][i] * delta[j]
+        temp_s.append(temp_t)
+    for k in range(len(temp_s)):
+        new_delta.append(node[k] * temp_s[k])
     return new_delta
 
 
 #Calculate convolution layer's δ
 def Conv_Delta(layer, delta, w):
     new_delta = []
-    temp_s = 0.0
 
     #Pass differential logistic function    
     node = Dif_Logistic_Func(layer.node)
     for i in range(len(layer.bp_node)):
+        temp_s = 0.0
         for j in range(len(w)):
             if (i-j >= 0) and (i-j < len(delta)):
                 temp_s += delta[i-j] * w[j]
         new_delta.append(temp_s)
-        temp_s = 0.0
     return new_delta
 
 

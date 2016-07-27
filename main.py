@@ -19,9 +19,9 @@ if __name__ == '__main__':
     #Conv weight
     w.append(MakeWeight(4,1))
     #M_Pool weight
-    next_nodelen=(len(input_node[0])-conv_kernel+1)/pool_kernel
+    next_nodelen=(len(input_node[0])-conv_kernel+1)/pool_kernel+1
     #FC weight(node_length and output node num)
-    w.append(MakeWeight(next_nodelen, 2))
+    w.append(MakeWeight(next_nodelen, 3))
     
     #Prepare layer object
     Input = Layer(0)
@@ -35,9 +35,9 @@ if __name__ == '__main__':
             start learning
     ------------------------------
     """
+    count = 0
 
-
-    for z in range(len(input_node)/2):
+    for z in range(len(input_node)):
 
         Input.node = input_node[z]
         Pass_Conv(Input, Conv_Layer1, w[0][0])
@@ -52,7 +52,21 @@ if __name__ == '__main__':
             print " %f " % i,
         print ']'
 
-            
+        """
+        ------------------------------
+          start evaluating accuracy
+        ------------------------------
+        """
+
+        max = [0.0, 0]
+        for i in range(len(Out_Layer1.node)):
+            if Out_Layer1.node[i] > max[0]:
+                max[0] = Out_Layer1.node[i]
+                max[1] = i
+        print max
+        if d[z][max[1]] == 1:
+            count += 1
+
 
         """
         ------------------------------
@@ -62,43 +76,14 @@ if __name__ == '__main__':
 
         #Calc delta
         delta_3 = Cross_Entropy(Out_Layer1.node, d[z])
-        delta_2 = FC_Delta(Pool_Layer1.node, delta_3, w[1])
+        delta_2 = Out_FC_Delta(Pool_Layer1.node, delta_3, w[1])
         delta_1 = Max_Pool_Delta(Pool_Layer1, delta_2)
         delta_0 = Conv_Delta(Conv_Layer1, delta_1, w[0][0])
         #Update weight
         w[1] = FC_Update(Pool_Layer1.node, delta_3, w[1])
         w[0][0] = Conv_Update(Input.node, delta_1, w[0][0])
 
-
-    """
-    ------------------------------
-      start evaluating accuracy
-    ------------------------------
-    """
-    
-    Input2 = Layer(0)
-    Conv_Layer2 = Layer(conv_kernel)
-    Pool_Layer2 = Layer(pool_kernel)
-    Out_Layer2 = Layer(0)
-    count = 0
-
-    for z in range(len(input_node)/2, len(input_node)):
-        Input2.node = input_node[z]
-        Pass_Conv(Input2, Conv_Layer2, w[0][0])
-        Pass_Max_Pool(Conv_Layer2, Pool_Layer2, pool_kernel)
-        Pass_FC_Out(Pool_Layer2, Out_Layer2, w[1])
-        
-        """
-        --------------------------
-       　　　　print result
-        --------------------------
-        """
-        max = [0,0]
-        for i in range(len(Out_Layer2.node)):
-            if Out_Layer2.node[i] > max[0]:
-                max[0] = Out_Layer2.node[i]
-                max[1] = i
-        if d[z][max[1]] == 1:
-            count += 1
     #accuracy
     print "%.2f%% correct." % (float(count) / float(len(input_node)) * 100.0)
+
+    
