@@ -3,8 +3,7 @@ import math
 import sys
 
 #learning rate
-epsilon = 0.3
-
+epsilon = 0.5
 
 #make weight
 def MakeWeight(x, y):
@@ -26,7 +25,6 @@ def Open_data(filename):
     Calculate Layer's node
 ------------------------------
 """
-
 
 
 #Logistic function(activation function)
