@@ -56,7 +56,7 @@ def Conv_Func(x, w):
 
     #error process(if can't mult matrix)
     if len(x) < len(w):
-        print "Multiple Faild in Convolution layer."
+        print "Multiple Faild in Conv layer."
         return 0.0
     next_node = []
     counter = 0
